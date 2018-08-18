@@ -1,0 +1,4 @@
+source,destination
+s3://bucket/key1.ext,cloudfiles://container/object1.ext
+s3://bucket/key2.ext,cloudfiles://container/object2.ext
+s3://bucket/key3.ext,cloudfiles://container/object3.ext

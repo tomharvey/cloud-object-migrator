@@ -1,0 +1,5 @@
+settings.py
+.eggs/
+.pytest_cache/
+*.log
+*.egg-info/
