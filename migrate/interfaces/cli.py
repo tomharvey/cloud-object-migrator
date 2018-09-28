@@ -1,10 +1,12 @@
 import click
+import logging
 
 from migrate.config import config
 from migrate.copy import FileCopier
 from migrate.csv import get_message_from_row, read_csv
 from migrate.logging import setup_logging
 from migrate.sqs import Sqs
+from migrate.threads import ThreadPool
 
 
 @click.group()
@@ -25,10 +27,15 @@ def from_csv(csv_path):
     """Add data from a csv file."""
     setup_logging()
     sqs = Sqs()
+    pool = ThreadPool(128)
 
     for row in read_csv(csv_path):
         message, extras = get_message_from_row(row)
-        sqs.add_message(message, extras)
+        logging.debug("{} ---> {}".format(
+            message['source'], message['destination']))
+        pool.add_task(sqs.add_message, message, extras)
+        # sqs.add_message(message, extras)
+    pool.wait_completion()
 
 
 @cli.command()
