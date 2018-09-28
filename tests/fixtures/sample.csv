@@ -1,0 +1,10 @@
+source,destination,bytes
+cloudfiles://rb_prv_allstars/0403d6cbb977e971c7157378f7a849543cbf7228.jpg,s3://rackspace-image-archive/rb_prv_allstars/0403d6cbb977e971c7157378f7a849543cbf7228.jpg,2989568
+cloudfiles://rb_prv_allstars/0a873855efcc92b6625983283565a11d18962d6a.jpg,s3://rackspace-image-archive/rb_prv_allstars/0a873855efcc92b6625983283565a11d18962d6a.jpg,2989568
+cloudfiles://rb_prv_allstars/1017a7f056094e65c8f1a93b2c6ec954070044f3.jpg,s3://rackspace-image-archive/rb_prv_allstars/1017a7f056094e65c8f1a93b2c6ec954070044f3.jpg,2989568
+cloudfiles://rb_prv_allstars/1905263f5e8e74d239be4e51321358c7e5587641.jpg,s3://rackspace-image-archive/rb_prv_allstars/1905263f5e8e74d239be4e51321358c7e5587641.jpg,2989568
+cloudfiles://rb_prv_allstars/1bbbd9e54907c8519d6641ceb457aa33f780cf86.jpg,s3://rackspace-image-archive/rb_prv_allstars/1bbbd9e54907c8519d6641ceb457aa33f780cf86.jpg,2989568
+cloudfiles://rb_prv_allstars/235f7d9824f76b4d60c887c25368ed11943f9c0b.jpg,s3://rackspace-image-archive/rb_prv_allstars/235f7d9824f76b4d60c887c25368ed11943f9c0b.jpg,2989568
+cloudfiles://rb_prv_allstars/26c077c674017b044f40e1f583e50681c606c573.jpg,s3://rackspace-image-archive/rb_prv_allstars/26c077c674017b044f40e1f583e50681c606c573.jpg,2989568
+cloudfiles://rb_prv_allstars/2712416bcaec73fe1af725d97957d4c747913ecc.jpg,s3://rackspace-image-archive/rb_prv_allstars/2712416bcaec73fe1af725d97957d4c747913ecc.jpg,2989568
+cloudfiles://rb_prv_allstars/2ba2139a14a81d57eefc79249554db455935499d.jpg,s3://rackspace-image-archive/rb_prv_allstars/2ba2139a14a81d57eefc79249554db455935499d.jpg,2989568

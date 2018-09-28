@@ -1,0 +1,48 @@
+{
+   "AWSTemplateFormatVersion" : "2010-09-09",
+
+   "Description" : "Underlying VPC config and shared infra support services",
+
+   "Parameters" : {
+        "Stage": {
+            "Description": "Staging environment - production or development",
+            "Type": "String",
+            "MinLength" : 1,
+            "MaxLength" : 255
+        }
+    },
+
+    "Resources" : {
+
+        "Queue" : {
+            "Type": "AWS::SQS::Queue",
+            "Properties": {
+                "QueueName": { "Fn::Join": [ "-", [ { "Ref" : "AWS::StackName" }, { "Ref": "Stage"} ] ] },
+                "RedrivePolicy": {
+                    "deadLetterTargetArn": {"Fn::GetAtt" : [ "QueueDLQ", "Arn" ]},
+                    "maxReceiveCount": 10
+                },
+                "VisibilityTimeout": 300
+            }
+        },
+        "QueueDLQ" : {
+            "Type": "AWS::SQS::Queue",
+            "Properties": {
+                "QueueName": { "Fn::Join": [ "-", [ { "Ref" : "AWS::StackName" }, { "Ref": "Stage"}, "DLQ" ] ] },
+                "VisibilityTimeout": 300,
+                "MessageRetentionPeriod": 1209600
+            }
+        },
+    },
+
+    "Outputs": {
+        "QueueARN" : {
+            "Description" : "ARN of newly created SQS Queue",
+            "Value" : { "Fn::GetAtt" : ["Queue", "Arn"]}
+        },
+        "QueueName" : {
+            "Description" : "Name newly created SQS Queue",
+            "Value" : { "Fn::GetAtt" : ["Queue", "QueueName"]}
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import boto3
+import botocore
 import json
 
 from migrate.config import config
@@ -12,9 +13,12 @@ class Sqs():
         """Create a class to handle SQS comms."""
         sqs = boto3.resource('sqs', region_name=config.AWS_REGION)
         queue_name = config.QUEUE_NAME
-        sqs.create_queue(QueueName=queue_name, Attributes={
-            'DelaySeconds': '5'
-        })
+        try:
+            sqs.create_queue(QueueName=queue_name, Attributes={
+                'DelaySeconds': '5'
+            })
+        except:
+            pass
         self.queue = sqs.get_queue_by_name(QueueName=queue_name)
 
     def add_message(self, file_pair, extras=None):

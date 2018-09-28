@@ -14,7 +14,7 @@ class FileCopier():
             username=config.RACKSPACE_USER,
             api_key=config.RACKSPACE_API,
             region=config.RACKSPACE_REGION)
-        self.aws = boto3.client('s3')
+        self.aws = boto3.resource('s3')
 
     def copy_files(self, message):
         """Copy files from source to destination."""
@@ -28,27 +28,52 @@ class FileCopier():
 
     def get_source(self, source):
         """Get the content of the source file."""
-        service, file = source.split(":")
+        service, file_path = source.split(":")
         if service == "cloudfiles":
-            header, body = self._get_source_from_rackspace(file)
+            body = self._get_from_rackspace(file_path)
         if service == "s3":
-            body = self._get_source_from_aws(file)
+            body = self._get_from_aws(file_path)
+        else:
+            raise NotImplementedError
         return body
 
     def put_destination(self, destination, source_content):
         """Upload content to the destination."""
-        print(destination)
-        print(source_content)
-        return True
+        service, destination_path = destination.split(":")
+        if service == "s3":
+            success = self._put_to_aws(destination_path, source_content)
+        else:
+            raise NotImplementedError
+        return success
 
-    def _get_source_from_rackspace(self, file):
+    def _get_from_rackspace(self, file_path):
         """Get the content from rackspace."""
-        _, _, container, *file_parts = file.split("/")
-        obj = "/".join(file_parts)
-        response = self.rackspace.get_object(container, obj)
+        obj_name, container_name = self._parse_file_dir_name(file_path)
+        response = self.rackspace.object_store.download_object(
+            obj_name, container=container_name)
         return response
 
-    def _get_source_from_aws(self, file):
-        """Get the content from AWS."""
-        print(file)
-        return "aws"
+    def _get_from_aws(self, file_path):
+        """Get the content from AWS S3."""
+        key_name, bucket_name = self._parse_file_dir_name(file_path)
+        s3_object = self.aws.Object(bucket_name, key_name)
+        response = s3_object.get()
+        body = response['Body'].read()
+        return body
+
+    def _put_to_aws(self, destination_path, source_content):
+        """Put the contents into AWS S3."""
+        key_name, bucket_name = self._parse_file_dir_name(destination_path)
+        s3_object = self.aws.Object(bucket_name, key_name)
+        s3_object.put(
+            Body=source_content,
+            ContentType="image/jpeg",
+            StorageClass="STANDARD_IA"
+        )
+        return True
+
+    def _parse_file_dir_name(self, file_path):
+        """Get the name of the file/key and object/container."""
+        _, _, container_name, *file_parts = file_path.split("/")
+        obj_name = "/".join(file_parts)
+        return obj_name, container_name
